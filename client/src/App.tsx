@@ -7,7 +7,6 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import StudentDashboard from "./pages/StudentDashboard";
 import TutorDashboard from "./pages/TutorDashboard";
-import AdminDashboard from "./pages/AdminDashboard";
 import StudentProfile from "./pages/StudentProfile";
 import TutorProfile from "./pages/TutorProfile";
 import FindTutors from "./pages/FindTutors";
@@ -28,7 +27,6 @@ function Router() {
       <Route path={"/tutor/sessions"} component={Sessions} />
       <Route path={"/sessions/:id"} component={SessionDetail} />
       <Route path={"/support"} component={Support} />
-      <Route path={"/admin"} component={AdminDashboard} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
