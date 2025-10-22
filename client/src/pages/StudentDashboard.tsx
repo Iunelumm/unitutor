@@ -58,11 +58,9 @@ export default function StudentDashboard() {
     <div className="min-h-screen bg-muted/30">
       <header className="border-b bg-white sticky top-0 z-50">
         <div className="container py-4 flex items-center justify-between">
-          <Link href="/">
-            <a className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <BookOpen className="h-8 w-8 text-primary" />
-              <h1 className="text-2xl font-bold text-primary">{APP_TITLE}</h1>
-            </a>
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <BookOpen className="h-8 w-8 text-primary" />
+            <h1 className="text-2xl font-bold text-primary">{APP_TITLE}</h1>
           </Link>
           <div className="flex items-center gap-4">
             <span className="text-sm text-muted-foreground">
@@ -85,33 +83,29 @@ export default function StudentDashboard() {
           <p className="text-muted-foreground">Manage your tutoring sessions and find new tutors</p>
         </div>
 
-        {needsRating.length > 0 && (
-          <Card className="mb-6 border-yellow-200 bg-yellow-50">
+        {!profile && (
+          <Card className="mb-8 border-primary/50 bg-primary/5">
             <CardHeader>
-              <CardTitle className="text-yellow-800">Action Required</CardTitle>
-              <CardDescription className="text-yellow-700">
-                You have {needsRating.length} session{needsRating.length > 1 ? 's' : ''} waiting for your rating
-              </CardDescription>
+              <CardTitle className="text-primary">Complete Your Profile</CardTitle>
+              <CardDescription>Set up your profile to start finding tutors</CardDescription>
             </CardHeader>
             <CardContent>
-              <Link href="/student/sessions">
-                <Button variant="default">Rate Sessions</Button>
+              <Link href="/student/profile">
+                <Button>Create Profile</Button>
               </Link>
             </CardContent>
           </Card>
         )}
 
-        {!profile && (
-          <Card className="mb-6 border-blue-200 bg-blue-50">
+        {needsRating.length > 0 && (
+          <Card className="mb-8 border-yellow-500/50 bg-yellow-50">
             <CardHeader>
-              <CardTitle className="text-blue-800">Complete Your Profile</CardTitle>
-              <CardDescription className="text-blue-700">
-                Set up your profile to start finding tutors
-              </CardDescription>
+              <CardTitle className="text-yellow-700">⚠️ Rating Required</CardTitle>
+              <CardDescription>You have {needsRating.length} session(s) waiting for your rating</CardDescription>
             </CardHeader>
             <CardContent>
-              <Link href="/student/profile">
-                <Button variant="default">Create Profile</Button>
+              <Link href="/student/sessions">
+                <Button variant="outline">View Sessions</Button>
               </Link>
             </CardContent>
           </Card>
@@ -119,46 +113,52 @@ export default function StudentDashboard() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Link href="/student/profile">
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+            <Card className="hover:shadow-md transition-shadow cursor-pointer">
               <CardHeader>
                 <User className="h-10 w-10 text-primary mb-2" />
                 <CardTitle className="text-lg">My Profile</CardTitle>
-                <CardDescription>
-                  {profile ? "Update your information" : "Create your profile"}
-                </CardDescription>
               </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  {profile ? "Update your profile" : "Create your profile"}
+                </p>
+              </CardContent>
             </Card>
           </Link>
 
           <Link href="/student/find-tutors">
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+            <Card className="hover:shadow-md transition-shadow cursor-pointer">
               <CardHeader>
                 <Search className="h-10 w-10 text-primary mb-2" />
                 <CardTitle className="text-lg">Find Tutors</CardTitle>
-                <CardDescription>Search for tutors by course</CardDescription>
               </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">Search for tutors by course</p>
+              </CardContent>
             </Card>
           </Link>
 
           <Link href="/student/sessions">
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+            <Card className="hover:shadow-md transition-shadow cursor-pointer">
               <CardHeader>
                 <Calendar className="h-10 w-10 text-primary mb-2" />
                 <CardTitle className="text-lg">My Sessions</CardTitle>
-                <CardDescription>
-                  {activeSessions.length} active session{activeSessions.length !== 1 ? 's' : ''}
-                </CardDescription>
               </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">{activeSessions.length} active sessions</p>
+              </CardContent>
             </Card>
           </Link>
 
           <Link href="/support">
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+            <Card className="hover:shadow-md transition-shadow cursor-pointer">
               <CardHeader>
                 <HelpCircle className="h-10 w-10 text-primary mb-2" />
                 <CardTitle className="text-lg">Support</CardTitle>
-                <CardDescription>Get help and FAQs</CardDescription>
               </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">Get help and FAQs</p>
+              </CardContent>
             </Card>
           </Link>
         </div>
@@ -169,33 +169,31 @@ export default function StudentDashboard() {
             <CardDescription>Your latest tutoring sessions</CardDescription>
           </CardHeader>
           <CardContent>
-            {sessions && sessions.length > 0 ? (
+            {activeSessions.length > 0 ? (
               <div className="space-y-4">
-                {sessions.slice(0, 5).map((session) => (
-                  <Link key={session.id} href={`/sessions/${session.id}`}>
-                    <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors">
-                      <div>
-                        <p className="font-semibold">{session.course}</p>
-                        <p className="text-sm text-muted-foreground">
-                          with {session.tutorName}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {new Date(session.startTime).toLocaleString()}
-                        </p>
-                      </div>
-                      <span className={`badge-status badge-${session.status.toLowerCase()}`}>
-                        {session.status}
-                      </span>
+                {activeSessions.slice(0, 5).map((session) => (
+                  <div key={session.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div>
+                      <p className="font-semibold">{session.course}</p>
+                      <p className="text-sm text-muted-foreground">
+                        with {session.tutorName}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {new Date(session.startTime).toLocaleString()}
+                      </p>
                     </div>
-                  </Link>
+                    <span className={`badge-status badge-${session.status.toLowerCase()}`}>
+                      {session.status}
+                    </span>
+                  </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8 text-muted-foreground">
-                <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>No sessions yet</p>
+              <div className="text-center py-12">
+                <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground mb-4">No sessions yet</p>
                 <Link href="/student/find-tutors">
-                  <Button className="mt-4">Find a Tutor</Button>
+                  <Button>Find a Tutor</Button>
                 </Link>
               </div>
             )}
@@ -205,3 +203,4 @@ export default function StudentDashboard() {
     </div>
   );
 }
+

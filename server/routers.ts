@@ -71,7 +71,8 @@ export const appRouter = router({
     get: protectedProcedure
       .input(z.object({ role: z.enum(["student", "tutor"]) }))
       .query(async ({ ctx, input }) => {
-        return await db.getProfile(ctx.user.id, input.role);
+        const profile = await db.getProfile(ctx.user.id, input.role);
+        return profile || null;
       }),
 
     save: protectedProcedure

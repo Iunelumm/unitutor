@@ -107,11 +107,9 @@ export default function StudentProfile() {
     <div className="min-h-screen bg-muted/30">
       <header className="border-b bg-white sticky top-0 z-50">
         <div className="container py-4 flex items-center justify-between">
-          <Link href="/">
-            <a className="flex items-center gap-2">
-              <BookOpen className="h-8 w-8 text-primary" />
-              <h1 className="text-2xl font-bold text-primary">{APP_TITLE}</h1>
-            </a>
+          <Link href="/" className="flex items-center gap-2 cursor-pointer">
+            <BookOpen className="h-8 w-8 text-primary" />
+            <h1 className="text-2xl font-bold text-primary">{APP_TITLE}</h1>
           </Link>
           <Link href="/student">
             <Button variant="outline" size="sm">
