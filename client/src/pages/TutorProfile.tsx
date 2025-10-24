@@ -36,6 +36,8 @@ export default function TutorProfile() {
     availability: [] as string[],
   });
 
+  const [selectedWeek, setSelectedWeek] = useState(0); // 0 = this week, 1 = next week, etc.
+
   const [courseSearch, setCourseSearch] = useState("");
   const [filteredCourses, setFilteredCourses] = useState(UCSB_COURSES);
 
@@ -46,7 +48,7 @@ export default function TutorProfile() {
         ? (profile.availability as any[]).map((slot: any) => {
             const day = DAYS[slot.dayOfWeek];
             const hour = slot.hourBlock.split(':')[0];
-            return `${day}-${hour}`;
+            return `${slot.weekIndex}-${day}-${hour}`;
           })
         : [];
 
@@ -86,13 +88,12 @@ export default function TutorProfile() {
       return;
     }
 
-    // Convert simple string slots to availability objects
-    const availability = formData.availability.map(slot => {
-      const [day, hour] = slot.split('-');
-      const dayIndex = DAYS.indexOf(day);
+    // Convert simple string sl    // Convert simple strings to availability objects
+    const availabilityObjects = formData.availability.map(slot => {
+      const [weekIndex, day, hour] = slot.split('-');
       return {
-        weekIndex: 0,
-        dayOfWeek: dayIndex,
+        weekIndex: parseInt(weekIndex),
+        dayOfWeek: DAYS.indexOf(day),
         hourBlock: `${hour}:00`,
         isBookable: true,
       };
@@ -107,7 +108,7 @@ export default function TutorProfile() {
       priceMin: parseInt(formData.hourlyRate),
       priceMax: parseInt(formData.hourlyRate),
       courses: formData.courses,
-      availability,
+      availability: availabilityObjects,
     });
   };
 
@@ -123,12 +124,19 @@ export default function TutorProfile() {
   };
 
   const toggleAvailability = (slot: string) => {
+    const slotWithWeek = `${selectedWeek}-${slot}`;
     setFormData(prev => ({
       ...prev,
-      availability: prev.availability.includes(slot)
-        ? prev.availability.filter(s => s !== slot)
-        : [...prev.availability, slot]
+      availability: prev.availability.includes(slotWithWeek)
+        ? prev.availability.filter(s => s !== slotWithWeek)
+        : [...prev.availability, slotWithWeek]
     }));
+  };
+
+  const getWeekLabel = (weekIndex: number) => {
+    if (weekIndex === 0) return "This Week";
+    if (weekIndex === 1) return "Next Week";
+    return `Week ${weekIndex + 1}`;
   };
 
   if (!isAuthenticated) {
@@ -262,8 +270,27 @@ export default function TutorProfile() {
               <div>
                 <Label>Availability (Week-Day-Hour) *</Label>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Select your available time slots. Students can book sessions at least 4 hours in advance.
+                  Select your available time slots for different weeks. Students can book sessions at least 4 hours in advance.
                 </p>
+                
+                {/* Week Selector */}
+                <div className="flex gap-2 mb-4">
+                  {[0, 1, 2, 3].map(weekIndex => (
+                    <button
+                      key={weekIndex}
+                      type="button"
+                      onClick={() => setSelectedWeek(weekIndex)}
+                      className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
+                        selectedWeek === weekIndex
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted hover:bg-muted/80"
+                      }`}
+                    >
+                      {getWeekLabel(weekIndex)}
+                    </button>
+                  ))}
+                </div>
+
                 <div className="border rounded-lg p-4 max-h-96 overflow-y-auto">
                   {DAYS.map(day => (
                     <div key={day} className="mb-4">
@@ -271,7 +298,8 @@ export default function TutorProfile() {
                       <div className="grid grid-cols-4 gap-2">
                         {HOURS.map(hour => {
                           const slot = `${day}-${hour}`;
-                          const isSelected = formData.availability.includes(slot);
+                          const slotWithWeek = `${selectedWeek}-${slot}`;
+                          const isSelected = formData.availability.includes(slotWithWeek);
                           return (
                             <div
                               key={slot}

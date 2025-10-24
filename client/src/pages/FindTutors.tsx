@@ -77,12 +77,14 @@ export default function FindTutors() {
     tutorAvailability.forEach(tutorSlot => {
       studentSlots.forEach(studentSlot => {
         if (
+          tutorSlot.weekIndex === studentSlot.weekIndex &&
           tutorSlot.dayOfWeek === studentSlot.dayOfWeek &&
           tutorSlot.hourBlock === studentSlot.hourBlock
         ) {
+          const weekLabel = tutorSlot.weekIndex === 0 ? "This Week" : tutorSlot.weekIndex === 1 ? "Next Week" : `Week ${tutorSlot.weekIndex + 1}`;
           const day = DAYS[tutorSlot.dayOfWeek];
           const hour = tutorSlot.hourBlock;
-          overlapping.push(`${day} ${hour}`);
+          overlapping.push(`${weekLabel} - ${day} ${hour}`);
         }
       });
     });
@@ -96,16 +98,21 @@ export default function FindTutors() {
       return;
     }
 
-    // Parse the selected time slot
-    const [dayStr, timeStr] = selectedTimeSlot.split(' ');
+    // Parse the selected time slot: "This Week - Monday 09:00" or "Next Week - Tuesday 14:00"
+    const parts = selectedTimeSlot.split(' - ');
+    const weekLabel = parts[0];
+    const [dayStr, timeStr] = parts[1].split(' ');
+    
+    const weekIndex = weekLabel === "This Week" ? 0 : weekLabel === "Next Week" ? 1 : parseInt(weekLabel.replace('Week ', '')) - 1;
     const dayIndex = DAYS.indexOf(dayStr);
     const hour = parseInt(timeStr.split(':')[0]);
 
     // Calculate start and end time (assuming 1-hour sessions)
     const now = new Date();
     const daysUntilTarget = (dayIndex - now.getDay() + 7) % 7 || 7;
+    const weeksToAdd = weekIndex;
     const startTime = new Date(now);
-    startTime.setDate(now.getDate() + daysUntilTarget);
+    startTime.setDate(now.getDate() + daysUntilTarget + (weeksToAdd * 7));
     startTime.setHours(hour, 0, 0, 0);
 
     const endTime = new Date(startTime);
