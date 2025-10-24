@@ -2,11 +2,13 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { APP_TITLE } from "@/const";
 import { trpc } from "@/lib/trpc";
-import { BookOpen, ArrowLeft, Send, Star } from "lucide-react";
+import { BookOpen, ArrowLeft, Send, Star, X } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Link, useLocation, useRoute } from "wouter";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -86,6 +88,18 @@ export default function SessionDetail() {
     },
   });
 
+  const cancelMutation = trpc.sessions.cancel.useMutation({
+    onSuccess: () => {
+      toast.success("Session cancelled successfully");
+      utils.sessions.get.invalidate();
+      utils.sessions.list.invalidate();
+      setLocation(window.location.pathname.includes("/tutor") ? "/tutor/sessions" : "/student/sessions");
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to cancel session");
+    },
+  });
+
   if (!isAuthenticated) {
     setLocation("/");
     return null;
@@ -101,6 +115,7 @@ export default function SessionDetail() {
 
   const isTutor = session.tutorId === user?.id;
   const canComplete = session.status === "CONFIRMED";
+  const canCancel = (session.status === "PENDING" || session.status === "CONFIRMED");
   const needsRating = session.status === "PENDING_RATING" && 
     (isTutor ? !session.tutorRated : !session.studentRated);
   const needsCancellationRating = session.status === "CANCELLED" && 
@@ -140,6 +155,17 @@ export default function SessionDetail() {
       score: rating,
       comment: ratingComment,
     });
+  };
+
+  const [cancelReason, setCancelReason] = useState("");
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
+
+  const handleCancel = () => {
+    cancelMutation.mutate({
+      sessionId,
+      reason: cancelReason || undefined,
+    });
+    setShowCancelDialog(false);
   };
 
   return (
@@ -203,6 +229,17 @@ export default function SessionDetail() {
                   <div className="pt-4 border-t">
                     <Button onClick={handleComplete} disabled={completeMutation.isPending}>
                       Mark as Complete
+                    </Button>
+                  </div>
+                )}
+
+                {canCancel && (
+                  <div className="pt-4 border-t">
+                    <Button 
+                      variant="destructive" 
+                      onClick={() => setShowCancelDialog(true)}
+                    >
+                      Cancel Session
                     </Button>
                   </div>
                 )}
@@ -409,6 +446,45 @@ export default function SessionDetail() {
           </div>
         </div>
       </div>
+
+      {/* Cancel Dialog */}
+      <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Cancel Session</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to cancel this session? This action can only be done 12+ hours before the session starts.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Reason (Optional)</Label>
+              <Textarea
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                placeholder="Let the other party know why you're cancelling..."
+                rows={3}
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button
+                variant="destructive"
+                onClick={handleCancel}
+                disabled={cancelMutation.isPending}
+                className="flex-1"
+              >
+                {cancelMutation.isPending ? "Cancelling..." : "Confirm Cancellation"}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowCancelDialog(false)}
+              >
+                Keep Session
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

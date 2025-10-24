@@ -13,6 +13,9 @@ import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { UCSB_COURSES, searchCourses } from "../../../shared/courses";
 
+const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const HOURS = Array.from({ length: 14 }, (_, i) => i + 8); // 8 AM to 9 PM
+
 export default function StudentProfile() {
   const { user, isAuthenticated } = useAuth();
   const [, setLocation] = useLocation();
@@ -31,7 +34,7 @@ export default function StudentProfile() {
     priceMin: "",
     priceMax: "",
     courses: [] as string[],
-    availability: [] as any[],
+    availability: [] as string[],
   });
 
   const [courseSearch, setCourseSearch] = useState("");
@@ -39,6 +42,15 @@ export default function StudentProfile() {
 
   useEffect(() => {
     if (profile) {
+      // Convert availability objects back to simple strings
+      const availabilitySlots = profile.availability 
+        ? (profile.availability as any[]).map((slot: any) => {
+            const day = DAYS[slot.dayOfWeek];
+            const hour = slot.hourBlock.split(':')[0];
+            return `${day}-${hour}`;
+          })
+        : [];
+
       setFormData({
         age: profile.age?.toString() || "",
         year: profile.year || "",
@@ -47,7 +59,7 @@ export default function StudentProfile() {
         priceMin: profile.priceMin?.toString() || "",
         priceMax: profile.priceMax?.toString() || "",
         courses: (profile.courses as string[]) || [],
-        availability: (profile.availability as any[]) || [],
+        availability: availabilitySlots,
       });
     }
   }, [profile]);
@@ -71,10 +83,22 @@ export default function StudentProfile() {
     e.preventDefault();
 
     if (!formData.age || !formData.year || !formData.major || 
-        !formData.priceMin || !formData.priceMax || formData.courses.length === 0) {
-      toast.error("Please complete all required fields");
+        !formData.priceMin || !formData.priceMax || formData.courses.length === 0 ||
+        formData.availability.length === 0) {
+      toast.error("Please complete all required fields including availability");
       return;
     }
+
+    // Convert simple strings to availability objects
+    const availabilityObjects = formData.availability.map(slot => {
+      const [day, hour] = slot.split('-');
+      return {
+        weekIndex: 0,
+        dayOfWeek: DAYS.indexOf(day),
+        hourBlock: `${hour}:00`,
+        isBookable: true,
+      };
+    });
 
     saveMutation.mutate({
       role: "student",
@@ -85,7 +109,7 @@ export default function StudentProfile() {
       priceMin: parseInt(formData.priceMin),
       priceMax: parseInt(formData.priceMax),
       courses: formData.courses,
-      availability: formData.availability,
+      availability: availabilityObjects,
     });
   };
 
@@ -98,6 +122,15 @@ export default function StudentProfile() {
 
   const removeCourse = (course: string) => {
     setFormData({ ...formData, courses: formData.courses.filter(c => c !== course) });
+  };
+
+  const toggleAvailability = (slot: string) => {
+    setFormData(prev => ({
+      ...prev,
+      availability: prev.availability.includes(slot)
+        ? prev.availability.filter(s => s !== slot)
+        : [...prev.availability, slot]
+    }));
   };
 
   if (!isAuthenticated) {
@@ -237,6 +270,39 @@ export default function StudentProfile() {
                       </div>
                     ))}
                   </div>
+                </div>
+              </div>
+
+              <div>
+                <Label>Your Availability (Week-Day-Hour) *</Label>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Select when you're available for tutoring sessions. You can only book tutors during overlapping time slots.
+                </p>
+                <div className="border rounded-lg p-4 max-h-96 overflow-y-auto">
+                  {DAYS.map(day => (
+                    <div key={day} className="mb-4">
+                      <h4 className="font-semibold mb-2">{day}</h4>
+                      <div className="grid grid-cols-4 gap-2">
+                        {HOURS.map(hour => {
+                          const slot = `${day}-${hour}`;
+                          const isSelected = formData.availability.includes(slot);
+                          return (
+                            <div
+                              key={slot}
+                              onClick={() => toggleAvailability(slot)}
+                              className={`p-2 text-center text-sm rounded cursor-pointer transition-colors ${
+                                isSelected 
+                                  ? "bg-primary text-primary-foreground" 
+                                  : "bg-muted hover:bg-muted/80"
+                              }`}
+                            >
+                              {hour}:00
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
