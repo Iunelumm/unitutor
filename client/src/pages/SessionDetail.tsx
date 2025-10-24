@@ -74,6 +74,18 @@ export default function SessionDetail() {
     },
   });
 
+  const rateCancellationMutation = trpc.ratings.rateCancellation.useMutation({
+    onSuccess: () => {
+      toast.success("Cancellation rated successfully");
+      utils.sessions.get.invalidate();
+      utils.sessions.list.invalidate();
+      setLocation(window.location.pathname.includes("/tutor") ? "/tutor/sessions" : "/student/sessions");
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to rate cancellation");
+    },
+  });
+
   if (!isAuthenticated) {
     setLocation("/");
     return null;
@@ -117,18 +129,6 @@ export default function SessionDetail() {
       comment: ratingComment,
     });
   };
-
-  const rateCancellationMutation = trpc.ratings.rateCancellation.useMutation({
-    onSuccess: () => {
-      toast.success("Cancellation rated successfully");
-      utils.sessions.get.invalidate();
-      utils.sessions.list.invalidate();
-      setLocation(window.location.pathname.includes("/tutor") ? "/tutor/sessions" : "/student/sessions");
-    },
-    onError: (error: any) => {
-      toast.error(error.message || "Failed to rate cancellation");
-    },
-  });
 
   const handleRateCancellation = () => {
     if (rating === 0) {
