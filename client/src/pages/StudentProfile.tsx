@@ -31,6 +31,7 @@ export default function StudentProfile() {
     priceMin: "",
     priceMax: "",
     courses: [] as string[],
+    availability: [] as any[],
   });
 
   const [courseSearch, setCourseSearch] = useState("");
@@ -46,6 +47,7 @@ export default function StudentProfile() {
         priceMin: profile.priceMin?.toString() || "",
         priceMax: profile.priceMax?.toString() || "",
         courses: (profile.courses as string[]) || [],
+        availability: (profile.availability as any[]) || [],
       });
     }
   }, [profile]);
@@ -83,7 +85,7 @@ export default function StudentProfile() {
       priceMin: parseInt(formData.priceMin),
       priceMax: parseInt(formData.priceMax),
       courses: formData.courses,
-      availability: [],
+      availability: formData.availability,
     });
   };
 

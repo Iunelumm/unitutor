@@ -72,7 +72,9 @@ export const sessions = mysqlTable("sessions", {
   studentRated: boolean("studentRated").default(false).notNull(),
   tutorRated: boolean("tutorRated").default(false).notNull(),
   cancelled: boolean("cancelled").default(false).notNull(),
+  cancelledBy: int("cancelledBy"),
   cancelReason: text("cancelReason"),
+  cancellationRated: boolean("cancellationRated").default(false).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

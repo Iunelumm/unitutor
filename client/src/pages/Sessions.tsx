@@ -60,6 +60,9 @@ export default function Sessions() {
     s.status === "PENDING_RATING" && 
     (isTutor ? !s.tutorRated : !s.studentRated)
   );
+  const cancelledSessions = mySessions.filter(s => 
+    s.status === "CANCELLED" && !s.cancellationRated && s.cancelledBy !== user?.id
+  );
   const completedSessions = mySessions.filter(s => 
     s.status === "CLOSED" || s.status === "DISPUTED"
   );
@@ -248,6 +251,48 @@ export default function Sessions() {
                           </div>
                           <Link href={`/sessions/${session.id}`}>
                             <Button>Rate Session</Button>
+                          </Link>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {cancelledSessions.length > 0 && (
+              <div>
+                <h3 className="text-xl font-bold mb-4 text-orange-700">⚠️ Cancelled Sessions - Rate Cancellation</h3>
+                <div className="space-y-4">
+                  {cancelledSessions.map((session) => (
+                    <Card key={session.id} className="border-orange-500/50">
+                      <CardContent className="pt-6">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <h4 className="font-bold text-lg">{session.course}</h4>
+                              <Badge className={STATUS_COLORS[session.status]}>
+                                {session.status}
+                              </Badge>
+                            </div>
+                            <div className="space-y-1 text-sm text-muted-foreground mb-3">
+                              <div className="flex items-center gap-2">
+                                <User className="h-4 w-4" />
+                                <span>
+                                  {isTutor ? `Student: ${session.studentName}` : `Tutor: ${session.tutorName}`} cancelled this session
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Calendar className="h-4 w-4" />
+                                <span>{new Date(session.startTime).toLocaleDateString()}</span>
+                              </div>
+                              {session.cancelReason && (
+                                <p className="text-sm italic">Reason: {session.cancelReason}</p>
+                              )}
+                            </div>
+                          </div>
+                          <Link href={`/sessions/${session.id}`}>
+                            <Button variant="outline">Rate Cancellation</Button>
                           </Link>
                         </div>
                       </CardContent>

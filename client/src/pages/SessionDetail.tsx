@@ -91,6 +91,9 @@ export default function SessionDetail() {
   const canComplete = session.status === "CONFIRMED";
   const needsRating = session.status === "PENDING_RATING" && 
     (isTutor ? !session.tutorRated : !session.studentRated);
+  const needsCancellationRating = session.status === "CANCELLED" && 
+    !session.cancellationRated && 
+    session.cancelledBy !== user?.id;
 
   const handleSendMessage = () => {
     if (!message.trim()) return;
@@ -110,6 +113,30 @@ export default function SessionDetail() {
     rateMutation.mutate({
       sessionId,
       targetId,
+      score: rating,
+      comment: ratingComment,
+    });
+  };
+
+  const rateCancellationMutation = trpc.ratings.rateCancellation.useMutation({
+    onSuccess: () => {
+      toast.success("Cancellation rated successfully");
+      utils.sessions.get.invalidate();
+      utils.sessions.list.invalidate();
+      setLocation(window.location.pathname.includes("/tutor") ? "/tutor/sessions" : "/student/sessions");
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to rate cancellation");
+    },
+  });
+
+  const handleRateCancellation = () => {
+    if (rating === 0) {
+      toast.error("Please select a rating");
+      return;
+    }
+    rateCancellationMutation.mutate({
+      sessionId,
       score: rating,
       comment: ratingComment,
     });
@@ -181,6 +208,57 @@ export default function SessionDetail() {
                 )}
               </CardContent>
             </Card>
+
+            {needsCancellationRating && (
+              <Card className="border-orange-500/50">
+                <CardHeader>
+                  <CardTitle>⚠️ Rate Cancellation</CardTitle>
+                  <CardDescription>
+                    The other party cancelled this session. Rate their cancellation behavior.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {session.cancelReason && (
+                    <div className="p-3 bg-muted rounded">
+                      <p className="text-sm font-medium mb-1">Cancellation Reason:</p>
+                      <p className="text-sm text-muted-foreground">{session.cancelReason}</p>
+                    </div>
+                  )}
+                  <div>
+                    <p className="text-sm font-medium mb-2">Rating</p>
+                    <div className="flex gap-2">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          onClick={() => setRating(star)}
+                          className="transition-transform hover:scale-110"
+                        >
+                          <Star
+                            className={`h-8 w-8 ${
+                              star <= rating
+                                ? "fill-yellow-500 text-yellow-500"
+                                : "text-gray-300"
+                            }`}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium mb-2">Comment (Optional)</p>
+                    <Textarea
+                      value={ratingComment}
+                      onChange={(e) => setRatingComment(e.target.value)}
+                      placeholder="How do you feel about this cancellation?..."
+                      rows={3}
+                    />
+                  </div>
+                  <Button onClick={handleRateCancellation} disabled={rateCancellationMutation.isPending}>
+                    Submit Cancellation Rating
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
 
             {needsRating && (
               <Card className="border-yellow-500/50">

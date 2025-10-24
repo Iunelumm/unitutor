@@ -220,6 +220,31 @@ export const appRouter = router({
           });
         }
         
+        // Check for time slot conflicts with tutor's confirmed sessions
+        const tutorSessions = await db.getUserSessions(input.tutorId);
+        const confirmedSessions = tutorSessions.filter(s => 
+          s.status === "CONFIRMED" || s.status === "PENDING"
+        );
+        
+        const hasConflict = confirmedSessions.some(existing => {
+          const existingStart = new Date(existing.startTime);
+          const existingEnd = new Date(existing.endTime);
+          
+          // Check if time ranges overlap
+          return (
+            (startTime >= existingStart && startTime < existingEnd) ||
+            (endTime > existingStart && endTime <= existingEnd) ||
+            (startTime <= existingStart && endTime >= existingEnd)
+          );
+        });
+        
+        if (hasConflict) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'This time slot is no longer available. The tutor has another session scheduled.'
+          });
+        }
+        
         const sessionId = await db.createSession({
           studentId: ctx.user.id,
           tutorId: input.tutorId,
@@ -323,6 +348,7 @@ export const appRouter = router({
         await db.updateSession(input.sessionId, {
           status: "CANCELLED",
           cancelled: true,
+          cancelledBy: ctx.user.id,
           cancelReason: input.reason || null,
         });
         
@@ -342,6 +368,15 @@ export const appRouter = router({
         
         if (!isStudent && !isTutor) {
           throw new TRPCError({ code: 'FORBIDDEN', message: 'Access denied' });
+        }
+        
+        // Prevent marking complete before session start time
+        const now = new Date();
+        if (now < session.startTime) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Cannot mark session as complete before it starts. This prevents fraudulent activity.'
+          });
         }
         
         const updates: any = {};
@@ -466,6 +501,56 @@ export const appRouter = router({
       }))
       .query(async ({ input }) => {
         return await db.getRatingsForUser(input.userId, input.visibility);
+      }),
+
+    rateCancellation: protectedProcedure
+      .input(z.object({
+        sessionId: z.number(),
+        score: z.number().min(1).max(5),
+        comment: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const session = await db.getSession(input.sessionId);
+        if (!session) {
+          throw new TRPCError({ code: 'NOT_FOUND', message: 'Session not found' });
+        }
+        
+        if (session.status !== "CANCELLED") {
+          throw new TRPCError({ code: 'BAD_REQUEST', message: 'Session is not cancelled' });
+        }
+        
+        if (!session.cancelledBy) {
+          throw new TRPCError({ code: 'BAD_REQUEST', message: 'No cancellation to rate' });
+        }
+        
+        // Only the non-cancelling party can rate the cancellation
+        if (session.cancelledBy === ctx.user.id) {
+          throw new TRPCError({ code: 'FORBIDDEN', message: 'Cannot rate your own cancellation' });
+        }
+        
+        if (session.studentId !== ctx.user.id && session.tutorId !== ctx.user.id) {
+          throw new TRPCError({ code: 'FORBIDDEN', message: 'Access denied' });
+        }
+        
+        if (session.cancellationRated) {
+          throw new TRPCError({ code: 'BAD_REQUEST', message: 'Cancellation already rated' });
+        }
+        
+        // Create rating for the person who cancelled
+        await db.createRating({
+          sessionId: input.sessionId,
+          raterId: ctx.user.id,
+          targetId: session.cancelledBy,
+          score: input.score,
+          comment: input.comment || null,
+          visibility: "public", // Cancellation ratings are always public
+        });
+        
+        await db.updateSession(input.sessionId, {
+          cancellationRated: true,
+        });
+        
+        return { success: true };
       }),
   }),
 
