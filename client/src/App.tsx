@@ -22,10 +22,11 @@ function Router() {
       <Route path={"/student/profile"} component={StudentProfile} />
       <Route path={"/student/find-tutors"} component={FindTutors} />
       <Route path={"/student/sessions"} component={Sessions} />
+      <Route path={"/student/sessions/:id"} component={SessionDetail} />
       <Route path={"/tutor"} component={TutorDashboard} />
       <Route path={"/tutor/profile"} component={TutorProfile} />
       <Route path={"/tutor/sessions"} component={Sessions} />
-      <Route path={"/sessions/:id"} component={SessionDetail} />
+      <Route path={"/tutor/sessions/:id"} component={SessionDetail} />
       <Route path={"/support"} component={Support} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />

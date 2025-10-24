@@ -19,7 +19,10 @@ const STATUS_COLORS: Record<string, string> = {
 
 export default function Sessions() {
   const { user, isAuthenticated } = useAuth();
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
+  const isStudentRoute = location.startsWith('/student');
+  const isTutorRoute = location.startsWith('/tutor');
+  const rolePrefix = isStudentRoute ? '/student' : '/tutor';
   const utils = trpc.useUtils();
 
   const { data: sessions, isLoading } = trpc.sessions.list.useQuery(undefined, {
@@ -163,7 +166,7 @@ export default function Sessions() {
                             >
                               Cancel
                             </Button>
-                            <Link href={`/sessions/${session.id}`}>
+                            <Link href={`${rolePrefix}/sessions/${session.id}`}>
                               <Button variant="ghost">View Details</Button>
                             </Link>
                           </div>
@@ -210,7 +213,7 @@ export default function Sessions() {
                               </div>
                             </div>
                           </div>
-                          <Link href={`/sessions/${session.id}`}>
+                          <Link href={`${rolePrefix}/sessions/${session.id}`}>
                             <Button>View Details</Button>
                           </Link>
                         </div>
@@ -249,7 +252,7 @@ export default function Sessions() {
                               </div>
                             </div>
                           </div>
-                          <Link href={`/sessions/${session.id}`}>
+                          <Link href={`${rolePrefix}/sessions/${session.id}`}>
                             <Button>Rate Session</Button>
                           </Link>
                         </div>
@@ -291,7 +294,7 @@ export default function Sessions() {
                               )}
                             </div>
                           </div>
-                          <Link href={`/sessions/${session.id}`}>
+                          <Link href={`${rolePrefix}/sessions/${session.id}`}>
                             <Button variant="outline">Rate Cancellation</Button>
                           </Link>
                         </div>
@@ -330,7 +333,7 @@ export default function Sessions() {
                               </div>
                             </div>
                           </div>
-                          <Link href={`/sessions/${session.id}`}>
+                          <Link href={`${rolePrefix}/sessions/${session.id}`}>
                             <Button variant="outline">View Details</Button>
                           </Link>
                         </div>

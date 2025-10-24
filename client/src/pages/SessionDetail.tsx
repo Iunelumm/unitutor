@@ -24,7 +24,10 @@ const STATUS_COLORS: Record<string, string> = {
 
 export default function SessionDetail() {
   const { user, isAuthenticated } = useAuth();
-  const [, params] = useRoute("/sessions/:id");
+  const [location] = useLocation();
+  const isStudentRoute = location.startsWith('/student');
+  const isTutorRoute = location.startsWith('/tutor');
+  const [, params] = useRoute(isStudentRoute ? "/student/sessions/:id" : "/tutor/sessions/:id");
   const [, setLocation] = useLocation();
   const sessionId = params?.id ? parseInt(params.id) : 0;
   const utils = trpc.useUtils();
@@ -71,7 +74,7 @@ export default function SessionDetail() {
       toast.success("Rating submitted successfully");
       utils.sessions.get.invalidate();
       utils.sessions.list.invalidate();
-      setLocation(window.location.pathname.includes("/tutor") ? "/tutor/sessions" : "/student/sessions");
+      setLocation(isTutorRoute ? "/tutor/sessions" : "/student/sessions");
     },
     onError: (error) => {
       toast.error(error.message || "Failed to submit rating");
@@ -83,7 +86,7 @@ export default function SessionDetail() {
       toast.success("Cancellation rated successfully");
       utils.sessions.get.invalidate();
       utils.sessions.list.invalidate();
-      setLocation(window.location.pathname.includes("/tutor") ? "/tutor/sessions" : "/student/sessions");
+      setLocation(isTutorRoute ? "/tutor/sessions" : "/student/sessions");
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to rate cancellation");
@@ -95,7 +98,7 @@ export default function SessionDetail() {
       toast.success("Session cancelled successfully");
       utils.sessions.get.invalidate();
       utils.sessions.list.invalidate();
-      setLocation(window.location.pathname.includes("/tutor") ? "/tutor/sessions" : "/student/sessions");
+      setLocation(isTutorRoute ? "/tutor/sessions" : "/student/sessions");
     },
     onError: (error) => {
       toast.error(error.message || "Failed to cancel session");
