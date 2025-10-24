@@ -32,6 +32,8 @@ export default function SessionDetail() {
   const [message, setMessage] = useState("");
   const [rating, setRating] = useState(0);
   const [ratingComment, setRatingComment] = useState("");
+  const [cancelReason, setCancelReason] = useState("");
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
 
   const { data: session } = trpc.sessions.get.useQuery(
     { sessionId },
@@ -156,9 +158,6 @@ export default function SessionDetail() {
       comment: ratingComment,
     });
   };
-
-  const [cancelReason, setCancelReason] = useState("");
-  const [showCancelDialog, setShowCancelDialog] = useState(false);
 
   const handleCancel = () => {
     cancelMutation.mutate({
