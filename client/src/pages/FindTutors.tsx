@@ -112,7 +112,7 @@ export default function FindTutors() {
     endTime.setHours(hour + 1);
 
     bookSessionMutation.mutate({
-      tutorId: selectedTutor.id,
+      tutorId: selectedTutor.userId,
       course: selectedCourse,
       startTime: startTime.toISOString(),
       endTime: endTime.toISOString(),
@@ -225,7 +225,7 @@ export default function FindTutors() {
                     <CardContent className="pt-6">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h4 className="font-bold text-lg mb-1">{tutor.name}</h4>
+                          <h4 className="font-bold text-lg mb-1">{tutor.userName}</h4>
                           <p className="text-sm text-muted-foreground mb-2">{tutor.bio}</p>
                           <div className="flex items-center gap-4 text-sm mb-3">
                             <div className="flex items-center gap-1">
@@ -262,7 +262,7 @@ export default function FindTutors() {
                           )}
                         </div>
                         
-                        <Dialog open={selectedTutor?.id === tutor.id} onOpenChange={(open) => !open && setSelectedTutor(null)}>
+                        <Dialog open={selectedTutor?.userId === tutor.userId} onOpenChange={(open) => !open && setSelectedTutor(null)}>
                           <DialogTrigger asChild>
                             <Button 
                               onClick={() => setSelectedTutor(tutor)}
@@ -273,7 +273,7 @@ export default function FindTutors() {
                           </DialogTrigger>
                           <DialogContent>
                             <DialogHeader>
-                              <DialogTitle>Book Session with {tutor.name}</DialogTitle>
+                              <DialogTitle>Book Session with {tutor.userName}</DialogTitle>
                               <DialogDescription>
                                 Select an available time slot for {selectedCourse}
                               </DialogDescription>
