@@ -109,10 +109,31 @@ export default function FindTutors() {
 
     // Calculate start and end time (assuming 1-hour sessions)
     const now = new Date();
-    const daysUntilTarget = (dayIndex - now.getDay() + 7) % 7 || 7;
-    const weeksToAdd = weekIndex;
+    const jsDay = now.getDay(); // 0=Sunday, 1=Monday, ..., 6=Saturday
+    
+    // Convert DAYS array index (0=Monday) to JS day (0=Sunday)
+    // DAYS: [Monday=0, Tuesday=1, ..., Sunday=6]
+    // JS:   [Sunday=0, Monday=1, ..., Saturday=6]
+    const targetJsDay = dayIndex === 6 ? 0 : dayIndex + 1; // Convert DAYS index to JS day
+    const currentJsDay = jsDay;
+    
+    // Calculate days from current day to target day
+    let daysToAdd;
+    if (weekIndex === 0) {
+      // This Week: calculate days to target day within this week
+      daysToAdd = targetJsDay - currentJsDay;
+      if (daysToAdd < 0) {
+        // Day has passed this week, move to next week
+        daysToAdd += 7;
+      }
+    } else {
+      // Future weeks
+      daysToAdd = (targetJsDay - currentJsDay + 7) % 7 + (weekIndex * 7);
+      if (daysToAdd === 0) daysToAdd = weekIndex * 7; // Same day of week
+    }
+    
     const startTime = new Date(now);
-    startTime.setDate(now.getDate() + daysUntilTarget + (weeksToAdd * 7));
+    startTime.setDate(now.getDate() + daysToAdd);
     startTime.setHours(hour, 0, 0, 0);
 
     const endTime = new Date(startTime);
