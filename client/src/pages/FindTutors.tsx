@@ -230,7 +230,7 @@ export default function FindTutors() {
                           <div className="flex items-center gap-4 text-sm mb-3">
                             <div className="flex items-center gap-1">
                               <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />
-                              <span className="font-medium">{tutor.averageRating?.toFixed(1) || "New"}</span>
+                              <span className="font-medium">{tutor.averageRating ? Number(tutor.averageRating).toFixed(1) : "New"}</span>
                             </div>
                             <span className="text-muted-foreground">
                               ${tutor.hourlyRate}/hour
