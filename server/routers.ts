@@ -393,11 +393,11 @@ export const appRouter = router({
           (isTutor ? true : session.tutorCompleted);
         
         if (bothCompleted) {
+          // Both parties confirmed completion - ready for rating
           updates.status = "PENDING_RATING";
-        } else if ((isStudent && !session.tutorCompleted) || (isTutor && !session.studentCompleted)) {
-          // One completed, one not - mark as disputed
-          updates.status = "DISPUTED";
         }
+        // If only one party completed, keep status as CONFIRMED and wait for the other
+        // Dispute detection will be handled by a separate check after session end time + grace period
         
         await db.updateSession(input.sessionId, updates);
         
