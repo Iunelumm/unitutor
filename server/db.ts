@@ -1,4 +1,4 @@
-import { and, eq, or, desc, sql } from "drizzle-orm";
+import { and, eq, or, desc, sql, like } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { 
   InsertUser, 
@@ -320,5 +320,68 @@ export async function getPendingRatingCount() {
     .from(sessions)
     .where(eq(sessions.status, "PENDING_RATING"));
   return result[0]?.count || 0;
+}
+
+export async function getAllUsers() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(users).orderBy(desc(users.createdAt));
+}
+
+export async function searchUsers(query: string) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(users)
+    .where(
+      or(
+        like(users.name, `%${query}%`),
+        like(users.email, `%${query}%`)
+      )
+    );
+}
+
+export async function getUserStats(userId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const userSessions = await db.select().from(sessions)
+    .where(or(eq(sessions.studentId, userId), eq(sessions.tutorId, userId)));
+  
+  const userRatings = await db.select().from(ratings)
+    .where(eq(ratings.targetId, userId));
+  
+  const avgRating = userRatings.length > 0
+    ? userRatings.reduce((sum, r) => sum + r.score, 0) / userRatings.length
+    : 0;
+  
+  return {
+    totalSessions: userSessions.length,
+    completedSessions: userSessions.filter(s => s.status === 'CLOSED').length,
+    disputedSessions: userSessions.filter(s => s.status === 'DISPUTED').length,
+    cancelledSessions: userSessions.filter(s => s.cancelled).length,
+    averageRating: avgRating,
+    totalRatings: userRatings.length,
+  };
+}
+
+export async function getTotalUserCount() {
+  const db = await getDb();
+  if (!db) return 0;
+  const result = await db.select({ count: sql<number>`COUNT(*)` }).from(users);
+  return result[0]?.count || 0;
+}
+
+export async function getStudentCount() {
+  const db = await getDb();
+  if (!db) return 0;
+  const studentProfiles = await db.select().from(profiles);
+  return studentProfiles.filter(p => p.userRole === 'student').length;
+}
+
+export async function getTutorCount() {
+  const db = await getDb();
+  if (!db) return 0;
+  const tutorProfiles = await db.select().from(profiles);
+  return tutorProfiles.filter(p => p.userRole === 'tutor').length;
 }
 

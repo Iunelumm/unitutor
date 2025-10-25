@@ -718,13 +718,45 @@ export const appRouter = router({
       const completedSessions = await db.getCompletedSessionCount();
       const disputes = await db.getDisputeCount();
       const pendingRatings = await db.getPendingRatingCount();
+      const totalUsers = await db.getTotalUserCount();
+      const studentCount = await db.getStudentCount();
+      const tutorCount = await db.getTutorCount();
       
       return {
         completedSessions,
         disputes,
         pendingRatings,
+        totalUsers,
+        studentCount,
+        tutorCount,
       };
     }),
+
+    users: adminProcedure.query(async () => {
+      return await db.getAllUsers();
+    }),
+
+    searchUsers: adminProcedure
+      .input(z.object({ query: z.string() }))
+      .query(async ({ input }) => {
+        return await db.searchUsers(input.query);
+      }),
+
+    userDetail: adminProcedure
+      .input(z.object({ userId: z.number() }))
+      .query(async ({ input }) => {
+        const user = await db.getUserById(input.userId);
+        const studentProfile = await db.getProfile(input.userId, 'student');
+        const tutorProfile = await db.getProfile(input.userId, 'tutor');
+        const stats = await db.getUserStats(input.userId);
+        
+        return {
+          user,
+          studentProfile,
+          tutorProfile,
+          stats,
+        };
+      }),
   }),
 });
 
