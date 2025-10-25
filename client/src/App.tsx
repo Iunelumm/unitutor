@@ -13,6 +13,7 @@ import FindTutors from "./pages/FindTutors";
 import Sessions from "./pages/Sessions";
 import SessionDetail from "./pages/SessionDetail";
 import Support from "./pages/Support";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function Router() {
   return (
@@ -28,6 +29,7 @@ function Router() {
       <Route path={"/tutor/sessions"} component={Sessions} />
       <Route path={"/tutor/sessions/:id"} component={SessionDetail} />
       <Route path={"/support"} component={Support} />
+      <Route path={"/admin"} component={AdminDashboard} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
