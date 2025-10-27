@@ -11,7 +11,7 @@ import { BookOpen, ArrowLeft, Send, Star, X } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Link, useLocation, useRoute } from "wouter";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const STATUS_COLORS: Record<string, string> = {
   PENDING: "bg-yellow-100 text-yellow-800",
@@ -37,6 +37,7 @@ export default function SessionDetail() {
   const [ratingComment, setRatingComment] = useState("");
   const [cancelReason, setCancelReason] = useState("");
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   const { data: session } = trpc.sessions.get.useQuery(
     { sessionId },
@@ -47,6 +48,13 @@ export default function SessionDetail() {
     { sessionId },
     { enabled: isAuthenticated && sessionId > 0, refetchInterval: 3000 }
   );
+
+  // Auto-scroll chat to bottom when new messages arrive
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   const sendMessageMutation = trpc.chat.send.useMutation({
     onSuccess: () => {
@@ -381,6 +389,7 @@ export default function SessionDetail() {
                             </div>
                           );
                         })}
+                        <div ref={chatEndRef} />
                       </div>
                     ) : (
                       <div className="h-full flex items-center justify-center">

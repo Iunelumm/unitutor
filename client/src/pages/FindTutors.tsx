@@ -35,10 +35,13 @@ export default function FindTutors() {
     { enabled: isAuthenticated }
   );
 
-  const { data: tutors, refetch } = trpc.tutors.search.useQuery(
+  const { data: tutorsRaw, refetch } = trpc.tutors.search.useQuery(
     { course: selectedCourse },
     { enabled: !!selectedCourse }
   );
+
+  // Filter out current user to prevent self-booking
+  const tutors = tutorsRaw?.filter(tutor => tutor.userId !== user?.id);
 
   const bookSessionMutation = trpc.sessions.create.useMutation({
     onSuccess: () => {

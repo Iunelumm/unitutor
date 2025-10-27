@@ -245,6 +245,14 @@ export const appRouter = router({
           });
         }
         
+        // Prevent self-booking
+        if (ctx.user.id === input.tutorId) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'You cannot book a session with yourself.'
+          });
+        }
+        
         const sessionId = await db.createSession({
           studentId: ctx.user.id,
           tutorId: input.tutorId,
@@ -432,6 +440,11 @@ export const appRouter = router({
         
         if (!isStudent && !isTutor) {
           throw new TRPCError({ code: 'FORBIDDEN', message: 'Access denied' });
+        }
+        
+        // Prevent self-rating
+        if (input.targetId === ctx.user.id) {
+          throw new TRPCError({ code: 'BAD_REQUEST', message: 'You cannot rate yourself.' });
         }
         
         // Check if already rated
