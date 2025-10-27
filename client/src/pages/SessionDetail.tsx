@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Link, useLocation, useRoute } from "wouter";
 import { toast } from "sonner";
 import { useState, useEffect, useRef } from "react";
+import { formatDatePT, formatTimePT, formatDateTimePT } from "@shared/timezone";
 
 const STATUS_COLORS: Record<string, string> = {
   PENDING: "bg-yellow-100 text-yellow-800",
@@ -223,14 +224,13 @@ export default function SessionDetail() {
                   <div>
                     <p className="text-muted-foreground">Date</p>
                     <p className="font-semibold">
-                      {new Date(session.startTime).toLocaleDateString()}
+                      {formatDatePT(session.startTime)} (PT)
                     </p>
                   </div>
                   <div>
                     <p className="text-muted-foreground">Time</p>
                     <p className="font-semibold">
-                      {new Date(session.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - 
-                      {new Date(session.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {formatTimePT(session.startTime)} - {formatTimePT(session.endTime)} PT
                     </p>
                   </div>
                 </div>
@@ -380,10 +380,7 @@ export default function SessionDetail() {
                               >
                                 <p className="text-sm">{msg.message}</p>
                                 <p className="text-xs mt-1 opacity-70">
-                                  {new Date(msg.createdAt).toLocaleTimeString([], {
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                  })}
+                                  {formatTimePT(msg.createdAt)}
                                 </p>
                               </div>
                             </div>
@@ -430,7 +427,7 @@ export default function SessionDetail() {
                 </div>
                 <div>
                   <p className="text-muted-foreground">Created</p>
-                  <p>{new Date(session.createdAt).toLocaleDateString()}</p>
+                  <p>{formatDateTimePT(session.createdAt)}</p>
                 </div>
                 {session.status === "PENDING_RATING" && (
                   <div>

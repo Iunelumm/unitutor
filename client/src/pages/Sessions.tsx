@@ -7,6 +7,7 @@ import { trpc } from "@/lib/trpc";
 import { BookOpen, ArrowLeft, Calendar, Clock, User } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { toast } from "sonner";
+import { formatDatePT, formatTimePT } from "@shared/timezone";
 
 const STATUS_COLORS: Record<string, string> = {
   PENDING: "bg-yellow-100 text-yellow-800",
@@ -139,13 +140,12 @@ export default function Sessions() {
                               </div>
                               <div className="flex items-center gap-2">
                                 <Calendar className="h-4 w-4" />
-                                <span>{new Date(session.startTime).toLocaleDateString()}</span>
+                                <span>{formatDatePT(session.startTime)} (PT)</span>
                               </div>
                               <div className="flex items-center gap-2">
                                 <Clock className="h-4 w-4" />
                                 <span>
-                                  {new Date(session.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - 
-                                  {new Date(session.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                  {formatTimePT(session.startTime)} - {formatTimePT(session.endTime)} PT
                                 </span>
                               </div>
                             </div>
@@ -202,13 +202,12 @@ export default function Sessions() {
                               </div>
                               <div className="flex items-center gap-2">
                                 <Calendar className="h-4 w-4" />
-                                <span>{new Date(session.startTime).toLocaleDateString()}</span>
+                                <span>{formatDatePT(session.startTime)} (PT)</span>
                               </div>
                               <div className="flex items-center gap-2">
                                 <Clock className="h-4 w-4" />
                                 <span>
-                                  {new Date(session.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - 
-                                  {new Date(session.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                  {formatTimePT(session.startTime)} - {formatTimePT(session.endTime)} PT
                                 </span>
                               </div>
                             </div>
@@ -248,7 +247,7 @@ export default function Sessions() {
                               </div>
                               <div className="flex items-center gap-2">
                                 <Calendar className="h-4 w-4" />
-                                <span>{new Date(session.startTime).toLocaleDateString()}</span>
+                                <span>{formatDatePT(session.startTime)} (PT)</span>
                               </div>
                             </div>
                           </div>
@@ -287,7 +286,7 @@ export default function Sessions() {
                               </div>
                               <div className="flex items-center gap-2">
                                 <Calendar className="h-4 w-4" />
-                                <span>{new Date(session.startTime).toLocaleDateString()}</span>
+                                <span>{formatDatePT(session.startTime)} (PT)</span>
                               </div>
                               {session.cancelReason && (
                                 <p className="text-sm italic">Reason: {session.cancelReason}</p>
@@ -329,7 +328,7 @@ export default function Sessions() {
                               </div>
                               <div className="flex items-center gap-2">
                                 <Calendar className="h-4 w-4" />
-                                <span>{new Date(session.startTime).toLocaleDateString()}</span>
+                                <span>{formatDatePT(session.startTime)} (PT)</span>
                               </div>
                             </div>
                           </div>

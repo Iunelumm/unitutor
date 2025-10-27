@@ -11,7 +11,7 @@ import { BookOpen, ArrowLeft } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
-import { UCSB_COURSES, searchCourses } from "../../../shared/courses";
+import { UCSB_COURSES, searchCourses, HIGH_DEMAND_COURSES } from "../../../shared/courses";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const HOURS = Array.from({ length: 14 }, (_, i) => i + 8); // 8 AM to 9 PM
@@ -34,6 +34,7 @@ export default function TutorProfile() {
     hourlyRate: "",
     courses: [] as string[],
     availability: [] as string[],
+    accessCode: "",
   });
 
   const [selectedWeek, setSelectedWeek] = useState(0); // 0 = this week, 1 = next week, etc.
@@ -60,6 +61,7 @@ export default function TutorProfile() {
         hourlyRate: profile.priceMin?.toString() || "",
         courses: (profile.courses as string[]) || [],
         availability: availabilitySlots,
+        accessCode: "", // Not needed for existing profiles
       });
     }
   }, [profile]);
@@ -81,6 +83,12 @@ export default function TutorProfile() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Check access code for new tutors
+    if (!profile && formData.accessCode !== "BETA-TUTOR-2025") {
+      toast.error("Invalid access code. Please contact us for beta access.");
+      return;
+    }
 
     if (!formData.age || !formData.year || !formData.major || !formData.bio ||
         !formData.hourlyRate || formData.courses.length === 0 || formData.availability.length === 0) {
@@ -171,6 +179,24 @@ export default function TutorProfile() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
+              {!profile && (
+                <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                  <Label htmlFor="accessCode" className="text-orange-900">Beta Access Code *</Label>
+                  <Input
+                    id="accessCode"
+                    type="text"
+                    value={formData.accessCode}
+                    onChange={(e) => setFormData({ ...formData, accessCode: e.target.value })}
+                    placeholder="Enter your beta access code"
+                    className="mt-2"
+                    required={!profile}
+                  />
+                  <p className="text-xs text-orange-700 mt-2">
+                    UniTutor is currently in beta. You need an access code to register as a tutor.
+                  </p>
+                </div>
+              )}
+
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="age">Age *</Label>
@@ -243,15 +269,19 @@ export default function TutorProfile() {
                   />
                   {courseSearch && filteredCourses.length > 0 && (
                     <div className="border rounded-md max-h-48 overflow-y-auto">
-                      {filteredCourses.slice(0, 10).map((course) => (
-                        <div
-                          key={course}
-                          className="p-2 hover:bg-muted cursor-pointer text-sm"
-                          onClick={() => addCourse(course)}
-                        >
-                          {course}
-                        </div>
-                      ))}
+                      {filteredCourses.slice(0, 10).map((course) => {
+                        const isHighDemand = HIGH_DEMAND_COURSES.includes(course);
+                        return (
+                          <div
+                            key={course}
+                            className="p-2 hover:bg-muted cursor-pointer text-sm flex items-center gap-2"
+                            onClick={() => addCourse(course)}
+                          >
+                            {isHighDemand && <span className="text-yellow-500">⭐</span>}
+                            {course}
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                   <div className="flex flex-wrap gap-2 mt-2">

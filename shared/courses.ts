@@ -147,3 +147,51 @@ export function searchCourses(query: string): string[] {
   );
 }
 
+
+
+// High-demand courses for cold start tutor recruitment
+export const HIGH_DEMAND_COURSES = [
+  // Computer Science - Core lower division
+  "CMPSC 8 - Introduction to Computer Science",
+  "CMPSC 16 - Problem Solving with Computers I",
+  "CMPSC 24 - Problem Solving with Computers II",
+  "CMPSC 40 - Foundations of Computer Science",
+  
+  // Computer Science - Core upper division
+  "CMPSC 130A - Data Structures and Algorithms I",
+  "CMPSC 130B - Data Structures and Algorithms II",
+  "CMPSC 165A - Artificial Intelligence",
+  "CMPSC 165B - Machine Learning",
+  
+  // Mathematics - Calculus sequence
+  "MATH 3A - Calculus with Applications",
+  "MATH 3B - Calculus with Applications",
+  "MATH 4A - Linear Algebra",
+  "MATH 6A - Vector Calculus I",
+  
+  // Physics - Lower division
+  "PHYS 6A - Physics for Scientists and Engineers",
+  "PHYS 6B - Physics for Scientists and Engineers",
+  "PHYS 6C - Physics for Scientists and Engineers",
+  
+  // Chemistry - General and Organic
+  "CHEM 1A - General Chemistry",
+  "CHEM 1B - General Chemistry",
+  "CHEM 6A - Organic Chemistry",
+  "CHEM 6B - Organic Chemistry",
+  
+  // Economics
+  "ECON 1 - Principles of Microeconomics",
+  "ECON 2 - Principles of Macroeconomics",
+  "ECON 10A - Intermediate Microeconomic Theory",
+  
+  // Statistics
+  "PSTAT 120A - Probability and Statistics",
+  "PSTAT 120B - Probability and Statistics",
+  "PSTAT 126 - Regression Analysis",
+  
+  // Writing - Required courses
+  "WRIT 2 - Academic Writing",
+  "WRIT 50 - Writing in the Disciplines",
+];
+

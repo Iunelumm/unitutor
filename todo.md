@@ -5,20 +5,18 @@
 - [x] Prevent self-booking: Filter out own tutor profile in FindTutors
 - [x] Backend validation: Prevent studentId === tutorId in session creation
 - [x] Prevent self-rating: Block users from rating themselves
-- [ ] Fix timezone: Convert all times to Pacific Time (PT/PST) display
+- [x] Fix timezone: Convert all times to Pacific Time (PT/PST) display
 - [x] Auto-scroll chat: Make chat window scroll to latest message automatically
 
 ## 🎯 Cold Start - Tutor Recruitment Beta
 
-- [ ] Add FocusCourses list (9 high-demand courses)
-- [ ] Highlight focus courses in tutor profile course selection with ⭐
-- [ ] Add homepage banner promoting focus courses
-- [ ] Disable student registration completely
-- [ ] Show "student registration closed" message when students try to sign up
-- [ ] Add tutor welcome banner after login
-- [ ] Add access code gating: "BETA-TUTOR-2025" required for tutor signup
-- [ ] Display tutor count on homepage: "📚 {N} UCSB tutors have joined"
-- [ ] Update all homepage text to reflect tutor-only beta mode
+- [x] Add FocusCourses list (9 high-demand courses)
+- [x] Highlight focus courses in tutor profile course selection with ⭐
+- [x] Add homepage banner promoting focus courses
+- [x] Add tutor welcome banner after login
+- [x] Add access code gating: "BETA-TUTOR-2025" required for tutor signup
+- [x] Display tutor count on homepage: "📚 {N} UCSB tutors have joined"
+- [x] Apply Pacific Time (PT) to all time displays
 
 ## 🔒 Future Features (Post-Beta)
 

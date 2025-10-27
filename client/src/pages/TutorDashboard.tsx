@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { APP_TITLE, getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
-import { BookOpen, Calendar, User, HelpCircle, LogOut, Award } from "lucide-react";
+import { BookOpen, Calendar, User, HelpCircle, LogOut, Award, Sparkles } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { toast } from "sonner";
 
@@ -93,6 +93,24 @@ export default function TutorDashboard() {
                 <Button>Create Tutor Profile</Button>
               </Link>
             </CardContent>
+          </Card>
+        )}
+
+        {profile && (
+          <Card className="mb-8 border-green-500/50 bg-gradient-to-r from-green-50 to-emerald-50">
+            <CardHeader>
+              <div className="flex items-start gap-3">
+                <Sparkles className="h-6 w-6 text-green-600 mt-1" />
+                <div>
+                  <CardTitle className="text-green-800">Welcome to UniTutor Beta!</CardTitle>
+                  <CardDescription className="text-green-700 mt-2">
+                    Thank you for being a founding tutor! You're helping build UCSB's peer tutoring community. 
+                    We're currently prioritizing high-demand courses like <strong>CMPSC 8, MATH 3A, CHEM 1A, ECON 1</strong>, and more. 
+                    Your profile will be featured prominently as we launch to students.
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
           </Card>
         )}
 

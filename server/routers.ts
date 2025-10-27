@@ -657,6 +657,10 @@ export const appRouter = router({
   }),
 
   admin: router({
+    getTutorCount: publicProcedure.query(async () => {
+      return await db.getTutorCount();
+    }),
+
     sessions: adminProcedure.query(async () => {
       const sessions = await db.getAllSessions();
       
