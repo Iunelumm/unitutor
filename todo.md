@@ -49,12 +49,23 @@
 
 - [x] Choose Railway MySQL (no code changes needed)
 - [x] Restore MySQL configuration
-- [ ] Set up Google OAuth credentials for production
-- [ ] Configure Vercel deployment
-- [ ] Set up environment variables in Vercel
+- [x] Set up Google OAuth credentials for production
+- [x] Push code to GitHub repository
+- [ ] Configure Railway deployment
+- [ ] Set up environment variables in Railway
 - [ ] Initialize database schema in Railway MySQL
 - [ ] Deploy to production
 - [ ] Test OAuth login flow
 - [ ] Test database operations
 - [ ] Configure custom domain (optional)
+
+
+
+## 🐛 Deployment Issues
+
+- [ ] Replace Manus OAuth with Google OAuth
+- [ ] Remove all Manus branding and warnings
+- [ ] Implement Google OAuth login flow
+- [ ] Update callback URL handling
+- [ ] Test complete authentication flow
 
