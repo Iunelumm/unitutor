@@ -43,3 +43,18 @@
 - [x] Admin session monitoring
 - [x] Admin ticket response system
 
+
+
+## 🚀 Deployment Migration (In Progress)
+
+- [x] Choose Railway MySQL (no code changes needed)
+- [x] Restore MySQL configuration
+- [ ] Set up Google OAuth credentials for production
+- [ ] Configure Vercel deployment
+- [ ] Set up environment variables in Vercel
+- [ ] Initialize database schema in Railway MySQL
+- [ ] Deploy to production
+- [ ] Test OAuth login flow
+- [ ] Test database operations
+- [ ] Configure custom domain (optional)
+
