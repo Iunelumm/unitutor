@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { APP_TITLE, getLoginUrl } from "@/const";
+import { APP_TITLE } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { Users, BookOpen, AlertTriangle, MessageSquare, LogOut, Search, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
@@ -23,7 +23,6 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function AdminDashboard() {
-  const { user, isAuthenticated, logout: authLogout } = useAuth();
   const [, setLocation] = useLocation();
   
   // Check if admin is authenticated via password
@@ -34,7 +33,7 @@ export default function AdminDashboard() {
     setLocation("/admin-login");
     return null;
   }
-  const logoutMutation = trpc.auth.logout.useMutation();
+  
   const utils = trpc.useUtils();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -79,42 +78,6 @@ export default function AdminDashboard() {
     });
   };
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Admin Access Required</CardTitle>
-            <CardDescription>Please sign in with admin credentials</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <a href={getLoginUrl()}>
-              <Button className="w-full">Sign In</Button>
-            </a>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  if (user?.role !== "admin") {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Access Denied</CardTitle>
-            <CardDescription>You do not have admin privileges</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button onClick={() => setLocation("/")} className="w-full">
-              Go to Home
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -125,7 +88,7 @@ export default function AdminDashboard() {
             <h1 className="text-xl font-bold">{APP_TITLE} Admin</h1>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">{user?.name} (Admin)</span>
+            <span className="text-sm text-muted-foreground">Admin</span>
             <Button variant="ghost" size="sm" onClick={handleLogout}>
               <LogOut className="w-4 h-4 mr-2" />
               Logout
