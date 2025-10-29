@@ -95,3 +95,12 @@
 - [x] Remove access code validation from tutor registration
 - [x] Remove access code input field from TutorProfile page
 
+
+
+## ⚖️ Legal Disclaimer & Terms
+
+- [x] Create Terms and Disclaimer page with full legal text (English + Chinese)
+- [x] Add "By signing up, you agree to..." text on registration/role selection page
+- [x] Add Footer component with Legal Disclaimer link
+- [x] Add copyright notice in footer
+

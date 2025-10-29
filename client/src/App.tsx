@@ -15,12 +15,14 @@ import SessionDetail from "./pages/SessionDetail";
 import Support from "./pages/Support";
 import AdminDashboard from "./pages/AdminDashboard";
 import RoleSelection from "./pages/RoleSelection";
+import Terms from "./pages/Terms";
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/role-selection"} component={RoleSelection} />
+      <Route path={"/terms"} component={Terms} />
       <Route path={"/student"} component={StudentDashboard} />
       <Route path={"/student/profile"} component={StudentProfile} />
       <Route path={"/student/find-tutors"} component={FindTutors} />

@@ -117,6 +117,14 @@ export default function RoleSelection() {
             </Card>
           </RadioGroup>
 
+          <div className="text-center text-xs text-muted-foreground mb-4">
+            By signing up, you agree to our{" "}
+            <a href="/terms" target="_blank" className="text-primary underline hover:text-primary/80">
+              Disclaimer and Terms of Use
+            </a>
+            .
+          </div>
+
           <Button 
             onClick={handleSubmit} 
             className="w-full"

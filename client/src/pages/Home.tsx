@@ -7,6 +7,7 @@ import { trpc } from "@/lib/trpc";
 import { BookOpen, Flame, Users } from "lucide-react";
 import { useLocation } from "wouter";
 import { useEffect } from "react";
+import Footer from "@/components/Footer";
 import { HIGH_DEMAND_COURSES } from "@shared/courses";
 
 export default function Home() {
@@ -77,6 +78,13 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="text-center text-xs text-muted-foreground mb-2">
+              By signing up, you agree to our{" "}
+              <a href="/terms" target="_blank" className="text-primary underline hover:text-primary/80">
+                Disclaimer and Terms of Use
+              </a>
+              .
+            </div>
             <a href={getLoginUrl()} className="block">
               <Button className="w-full h-12 text-lg" size="lg">
                 Sign In / Register
@@ -100,10 +108,8 @@ export default function Home() {
           </CardContent>
         </Card>
 
-        <div className="mt-8 text-center text-sm text-muted-foreground">
-          <p>© 2025 UniTutor. Built for UCSB.</p>
-        </div>
       </div>
+      <Footer />
     </div>
   );
 }
