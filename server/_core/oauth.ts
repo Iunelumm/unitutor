@@ -51,7 +51,11 @@ async function getUserInfo(accessToken: string) {
 async function createSessionToken(openId: string, name: string): Promise<string> {
   const secret = new TextEncoder().encode(process.env.JWT_SECRET || 'default-secret-key');
   
-  const token = await new SignJWT({ openId, name })
+  const token = await new SignJWT({ 
+    openId, 
+    name,
+    appId: process.env.VITE_APP_ID || 'unitutor'
+  })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('365d')
