@@ -34,7 +34,6 @@ export default function TutorProfile() {
     hourlyRate: "",
     courses: [] as string[],
     availability: [] as string[],
-    accessCode: "",
   });
 
   const [selectedWeek, setSelectedWeek] = useState(0); // 0 = this week, 1 = next week, etc.
@@ -61,7 +60,6 @@ export default function TutorProfile() {
         hourlyRate: profile.priceMin?.toString() || "",
         courses: (profile.courses as string[]) || [],
         availability: availabilitySlots,
-        accessCode: "", // Not needed for existing profiles
       });
     }
   }, [profile]);
@@ -83,12 +81,6 @@ export default function TutorProfile() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Check access code for new tutors
-    if (!profile && formData.accessCode !== "BETA-TUTOR-2025") {
-      toast.error("Invalid access code. Please contact us for beta access.");
-      return;
-    }
 
     if (!formData.age || !formData.year || !formData.major || !formData.bio ||
         !formData.hourlyRate || formData.courses.length === 0 || formData.availability.length === 0) {
@@ -179,24 +171,6 @@ export default function TutorProfile() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              {!profile && (
-                <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
-                  <Label htmlFor="accessCode" className="text-orange-900">Beta Access Code *</Label>
-                  <Input
-                    id="accessCode"
-                    type="text"
-                    value={formData.accessCode}
-                    onChange={(e) => setFormData({ ...formData, accessCode: e.target.value })}
-                    placeholder="Enter your beta access code"
-                    className="mt-2"
-                    required={!profile}
-                  />
-                  <p className="text-xs text-orange-700 mt-2">
-                    UniTutor is currently in beta. You need an access code to register as a tutor.
-                  </p>
-                </div>
-              )}
-
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="age">Age *</Label>

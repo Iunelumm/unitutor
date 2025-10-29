@@ -88,3 +88,10 @@
 - [x] Emphasize priority recommendation for early tutors
 - [x] Hide role switch button for single-role users
 
+
+
+## 🔧 Remove Access Code
+
+- [x] Remove access code validation from tutor registration
+- [x] Remove access code input field from TutorProfile page
+
