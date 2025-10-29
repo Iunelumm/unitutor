@@ -77,3 +77,14 @@
 - [x] Update high-demand courses to: ECON 10A, CHEM 109A, CHEM 1A, MATH 3A, CMPSC 8, CMPSC 16
 - [ ] Ensure admin dashboard is accessible (can stay on Manus platform)
 
+
+
+## 🎯 User Role Selection & Onboarding
+
+- [x] Add role selection during registration (Student / Tutor / Both)
+- [x] Store user's selected roles in database
+- [x] Only allow role switching for users who selected "Both"
+- [x] Add founding tutor welcome message after tutor registration
+- [x] Emphasize priority recommendation for early tutors
+- [x] Hide role switch button for single-role users
+

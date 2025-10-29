@@ -65,9 +65,11 @@ export default function TutorDashboard() {
             <span className="text-sm text-muted-foreground">
               {user?.name} <span className="text-xs">(Tutor)</span>
             </span>
-            <Link href="/student">
-              <Button variant="outline" size="sm">Switch to Student</Button>
-            </Link>
+            {user?.preferredRoles === "both" && (
+              <Link href="/student">
+                <Button variant="outline" size="sm">Switch to Student</Button>
+              </Link>
+            )}
             <Button variant="ghost" size="sm" onClick={handleLogout}>
               <LogOut className="h-4 w-4 mr-2" />
               Logout
@@ -102,11 +104,11 @@ export default function TutorDashboard() {
               <div className="flex items-start gap-3">
                 <Sparkles className="h-6 w-6 text-green-600 mt-1" />
                 <div>
-                  <CardTitle className="text-green-800">Welcome to UniTutor Beta!</CardTitle>
+                  <CardTitle className="text-green-800">🎉 Welcome, Founding Tutor!</CardTitle>
                   <CardDescription className="text-green-700 mt-2">
-                    Thank you for being a founding tutor! You're helping build UCSB's peer tutoring community. 
-                    We're currently prioritizing high-demand courses like <strong>CMPSC 8, MATH 3A, CHEM 1A, ECON 1</strong>, and more. 
-                    Your profile will be featured prominently as we launch to students.
+                    Thank you for being one of our founding tutors! As an early member, you'll receive <strong>priority placement</strong> in search results. 
+                    We're currently focusing on high-demand courses: <strong>ECON 10A, CHEM 109A, CHEM 1A, MATH 3A, CMPSC 8, CMPSC 16</strong>. 
+                    Your profile will be featured first as we launch to students!
                   </CardDescription>
                 </div>
               </div>

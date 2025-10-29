@@ -66,9 +66,11 @@ export default function StudentDashboard() {
             <span className="text-sm text-muted-foreground">
               {user?.name} <span className="text-xs">(Student)</span>
             </span>
-            <Link href="/tutor">
-              <Button variant="outline" size="sm">Switch to Tutor</Button>
-            </Link>
+            {user?.preferredRoles === "both" && (
+              <Link href="/tutor">
+                <Button variant="outline" size="sm">Switch to Tutor</Button>
+              </Link>
+            )}
             <Button variant="ghost" size="sm" onClick={handleLogout}>
               <LogOut className="h-4 w-4 mr-2" />
               Logout

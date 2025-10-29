@@ -67,6 +67,20 @@ export const appRouter = router({
     }),
   }),
 
+  user: router({
+    updatePreferredRoles: protectedProcedure
+      .input(z.object({
+        preferredRoles: z.enum(["student", "tutor", "both"])
+      }))
+      .mutation(async ({ ctx, input }) => {
+        await db.upsertUser({
+          openId: ctx.user.openId,
+          preferredRoles: input.preferredRoles,
+        });
+        return { success: true };
+      }),
+  }),
+
   profile: router({
     get: protectedProcedure
       .input(z.object({ role: z.enum(["student", "tutor"]) }))

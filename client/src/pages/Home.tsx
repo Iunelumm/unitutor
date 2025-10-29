@@ -20,8 +20,21 @@ export default function Home() {
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      // Redirect authenticated users to their dashboard
-      setLocation("/student");
+      // Check if user has selected their role preferences
+      if (!user.preferredRoles) {
+        // First-time user, redirect to role selection
+        setLocation("/role-selection");
+      } else {
+        // Redirect based on their preferred role
+        if (user.preferredRoles === "student") {
+          setLocation("/student");
+        } else if (user.preferredRoles === "tutor") {
+          setLocation("/tutor");
+        } else {
+          // For 'both', default to student view
+          setLocation("/student");
+        }
+      }
     }
   }, [isAuthenticated, user, setLocation]);
 
