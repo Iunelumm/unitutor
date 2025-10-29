@@ -104,3 +104,9 @@
 - [x] Add Footer component with Legal Disclaimer link
 - [x] Add copyright notice in footer
 
+
+
+## 🔧 Admin Access Fix
+
+- [x] Allow admin users to bypass role selection and go directly to admin dashboard
+

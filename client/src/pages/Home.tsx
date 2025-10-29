@@ -21,6 +21,12 @@ export default function Home() {
 
   useEffect(() => {
     if (isAuthenticated && user) {
+      // Admin users go directly to admin dashboard
+      if (user.role === "admin") {
+        setLocation("/admin");
+        return;
+      }
+      
       // Check if user has selected their role preferences
       if (!user.preferredRoles) {
         // First-time user, redirect to role selection
