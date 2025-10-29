@@ -51,11 +51,11 @@
 - [x] Restore MySQL configuration
 - [x] Set up Google OAuth credentials for production
 - [x] Push code to GitHub repository
-- [ ] Configure Railway deployment
-- [ ] Set up environment variables in Railway
-- [ ] Initialize database schema in Railway MySQL
-- [ ] Deploy to production
-- [ ] Test OAuth login flow
+- [x] Configure Railway deployment
+- [x] Set up environment variables in Railway
+- [x] Initialize database schema in Railway MySQL
+- [x] Deploy to production
+- [x] Test OAuth login flow
 - [ ] Test database operations
 - [ ] Configure custom domain (optional)
 
@@ -63,9 +63,17 @@
 
 ## 🐛 Deployment Issues
 
-- [ ] Replace Manus OAuth with Google OAuth
-- [ ] Remove all Manus branding and warnings
-- [ ] Implement Google OAuth login flow
-- [ ] Update callback URL handling
-- [ ] Test complete authentication flow
+- [x] Replace Manus OAuth with Google OAuth
+- [x] Remove all Manus branding and warnings
+- [x] Implement Google OAuth login flow
+- [x] Update callback URL handling
+- [x] Test complete authentication flow
+
+
+
+## 🐛 Production Issues
+
+- [ ] Fix OAuth callback error on Railway deployment
+- [x] Update high-demand courses to: ECON 10A, CHEM 109A, CHEM 1A, MATH 3A, CMPSC 8, CMPSC 16
+- [ ] Ensure admin dashboard is accessible (can stay on Manus platform)
 
