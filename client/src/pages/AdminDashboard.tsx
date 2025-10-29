@@ -25,6 +25,15 @@ const STATUS_COLORS: Record<string, string> = {
 export default function AdminDashboard() {
   const { user, isAuthenticated, logout: authLogout } = useAuth();
   const [, setLocation] = useLocation();
+  
+  // Check if admin is authenticated via password
+  const isAdminAuthenticated = sessionStorage.getItem("adminAuthenticated") === "true";
+  
+  // Redirect to admin login if not authenticated
+  if (!isAdminAuthenticated) {
+    setLocation("/admin-login");
+    return null;
+  }
   const logoutMutation = trpc.auth.logout.useMutation();
   const utils = trpc.useUtils();
 
@@ -33,29 +42,14 @@ export default function AdminDashboard() {
   const [ticketResponse, setTicketResponse] = useState("");
   const [ticketStatus, setTicketStatus] = useState<"pending" | "in_progress" | "resolved">("in_progress");
 
-  const { data: sessions } = trpc.admin.sessions.useQuery(undefined, {
-    enabled: isAuthenticated && user?.role === "admin",
-  });
-
-  const { data: disputes } = trpc.admin.disputes.useQuery(undefined, {
-    enabled: isAuthenticated && user?.role === "admin",
-  });
-
-  const { data: tickets } = trpc.admin.tickets.useQuery(undefined, {
-    enabled: isAuthenticated && user?.role === "admin",
-  });
-
-  const { data: analytics } = trpc.admin.analytics.useQuery(undefined, {
-    enabled: isAuthenticated && user?.role === "admin",
-  });
-
-  const { data: users } = trpc.admin.users.useQuery(undefined, {
-    enabled: isAuthenticated && user?.role === "admin",
-  });
-
+  const { data: sessions } = trpc.admin.sessions.useQuery();
+  const { data: disputes } = trpc.admin.disputes.useQuery();
+  const { data: tickets } = trpc.admin.tickets.useQuery();
+  const { data: analytics } = trpc.admin.analytics.useQuery();
+  const { data: users } = trpc.admin.users.useQuery();
   const { data: searchResults } = trpc.admin.searchUsers.useQuery(
     { query: searchQuery },
-    { enabled: isAuthenticated && user?.role === "admin" && searchQuery.length > 2 }
+    { enabled: searchQuery.length > 2 }
   );
 
   const updateTicketMutation = trpc.admin.updateTicket.useMutation({
@@ -71,10 +65,10 @@ export default function AdminDashboard() {
   });
 
   const handleLogout = async () => {
-    await logoutMutation.mutateAsync();
-    authLogout();
+    // Clear admin session
+    sessionStorage.removeItem("adminAuthenticated");
     toast.success("Logged out successfully");
-    setLocation("/");
+    setLocation("/admin-login");
   };
 
   const handleUpdateTicket = (ticketId: number) => {

@@ -110,3 +110,11 @@
 
 - [x] Allow admin users to bypass role selection and go directly to admin dashboard
 
+
+
+## 🔐 Simple Admin Access
+
+- [x] Create password-protected admin login page (/admin-login)
+- [x] Use session storage to remember admin login
+- [x] Remove role-based admin access logic
+
