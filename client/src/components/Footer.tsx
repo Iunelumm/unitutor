@@ -3,8 +3,8 @@ import { APP_TITLE } from "@/const";
 
 export default function Footer() {
   return (
-    <footer className="border-t bg-white mt-auto">
-      <div className="container py-6">
+    <footer className="border-t bg-white w-full">
+      <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-sm text-muted-foreground text-center md:text-left">
             <p>© 2025 {APP_TITLE} Project. All rights reserved.</p>
