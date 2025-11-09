@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://unitutor-production.up.railway.app/</loc>
+    <lastmod>2024-11-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Sign In / Register -->
+  <url>
+    <loc>https://unitutor-production.up.railway.app/signin</loc>
+    <lastmod>2024-11-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Find Tutors -->
+  <url>
+    <loc>https://unitutor-production.up.railway.app/find-tutors</loc>
+    <lastmod>2024-11-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Become a Tutor -->
+  <url>
+    <loc>https://unitutor-production.up.railway.app/become-tutor</loc>
+    <lastmod>2024-11-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- About -->
+  <url>
+    <loc>https://unitutor-production.up.railway.app/about</loc>
+    <lastmod>2024-11-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Terms of Service -->
+  <url>
+    <loc>https://unitutor-production.up.railway.app/terms</loc>
+    <lastmod>2024-11-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <!-- Privacy Policy -->
+  <url>
+    <loc>https://unitutor-production.up.railway.app/privacy</loc>
+    <lastmod>2024-11-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <!-- Popular Courses -->
+  <url>
+    <loc>https://unitutor-production.up.railway.app/courses/econ-10a</loc>
+    <lastmod>2024-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://unitutor-production.up.railway.app/courses/chem-109a</loc>
+    <lastmod>2024-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://unitutor-production.up.railway.app/courses/pstat-8</loc>
+    <lastmod>2024-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://unitutor-production.up.railway.app/courses/chem-1a</loc>
+    <lastmod>2024-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://unitutor-production.up.railway.app/courses/math-3a</loc>
+    <lastmod>2024-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>
