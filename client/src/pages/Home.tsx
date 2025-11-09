@@ -44,8 +44,9 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-4">
-      <div className="w-full max-w-2xl">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+      <div className="flex-1 flex items-center justify-center p-4">
+        <div className="w-full max-w-2xl">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
             <BookOpen className="h-12 w-12 text-primary" />
@@ -107,7 +108,7 @@ export default function Home() {
             </div>
           </CardContent>
         </Card>
-
+        </div>
       </div>
       <Footer />
     </div>
