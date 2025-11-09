@@ -10,7 +10,8 @@ export const FOCUS_COURSES = [
   { code: "CHEM 1A", name: "General Chemistry I" },
   { code: "CHEM 1AL", name: "General Chemistry Lab" },
   { code: "CHEM 109A", name: "Organic Chemistry I" },
-  { code: "PSTAT 109", name: "Statistics Sequence Course" },
+  { code: "PSTAT 8", name: "Transition to Data Science, Probability and Statistics" },
+  { code: "PSTAT 109", name: "Statistics for Economics and Finance" },
   { code: "PSTAT 120A", name: "Probability and Statistics" },
   { code: "MATH 4A", name: "Linear Algebra with Applications" },
 ];
